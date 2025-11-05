@@ -58,8 +58,4 @@ public class JwtService {
     }
 
 
-    public String fetchbyId(String token){
-
-        return extractClaim(token).getSubject();
-    }
 }
