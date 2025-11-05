@@ -29,15 +29,13 @@ public class WebConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/token").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/user").hasRole("USER"))
-
-                .formLogin(Customizer.withDefaults())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .permitAll()
-                    );
+                // .requestMatchers("/admin").hasRole("ADMIN")
+                // .requestMatchers("/user").hasRole("USER")
+                )
+                .formLogin(formLogin -> formLogin.disable())
+                // .formLogin(Customizer.withDefaults())
+                .logout(logout -> logout.disable());
+       
 
         return httpSecurity.build();
     }
