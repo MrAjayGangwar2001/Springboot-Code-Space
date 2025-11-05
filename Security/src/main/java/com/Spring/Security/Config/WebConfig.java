@@ -35,7 +35,11 @@ public class WebConfig {
                 .formLogin(formLogin -> formLogin.disable())
                 // .formLogin(Customizer.withDefaults())
                 .logout(logout -> logout.disable());
-       
+        // .logout(logout -> logout
+        // .logoutUrl("/logout")
+        // .logoutSuccessUrl("/")
+        // .permitAll()
+        // );
 
         return httpSecurity.build();
     }
