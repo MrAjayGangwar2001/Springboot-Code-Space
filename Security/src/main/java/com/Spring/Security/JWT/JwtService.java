@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.Spring.Security.Model.UserModel;
 import com.Spring.Security.Repository.UserRepository;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -49,5 +50,16 @@ public class JwtService {
         userRepo.save(user);
 
         return " Data has been successfully Sent";
+    }
+
+    public Claims extractClaim(String token){
+
+        return Jwts.parser().verifyWith(EncodeKey()).build().parseSignedClaims(token).getPayload();
+    }
+
+
+    public String fetchbyId(String token){
+
+        return extractClaim(token).getSubject();
     }
 }
