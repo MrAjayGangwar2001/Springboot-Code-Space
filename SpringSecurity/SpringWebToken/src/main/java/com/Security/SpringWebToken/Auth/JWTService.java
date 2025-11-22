@@ -25,7 +25,7 @@ public class JWTService {
     
 
 
-    public JWTService(@Value("JWT_SECRET") String key,@Value("JWT_EXPIRATION_MS") Long expiration) {
+    public JWTService(@Value("${JWT_SECRET}") String key,@Value("${JWT_EXPIRATION_MS}") Long expiration) {
         this.Key = Keys.hmacShaKeyFor(key.getBytes(StandardCharsets.UTF_8));
         this.Expiration = expiration;
 
