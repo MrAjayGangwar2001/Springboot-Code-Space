@@ -1,5 +1,6 @@
 package com.Security.SpringWebToken.Controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-
+// @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 public class HomeController {
@@ -41,7 +42,9 @@ public class HomeController {
 
     @PostMapping("/register")
     public String RegisterUser(@RequestBody UserModel user) {
-       
+       System.out.println("USER PASSWORD : "+user.getPassword());
+       System.out.println("USER EMAIL : "+user.getEmail());
+       System.out.println("USER USERNAME : "+user.getUsername());
         return userv.CreateUser(user);
     }
 
