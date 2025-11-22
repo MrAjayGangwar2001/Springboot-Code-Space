@@ -20,21 +20,24 @@ public class UserService {
     private final PasswordEncoder passEncoder;
     private final JWTService jwtServ;
 
-    public String CreateUser(UserModel user) {
-       
-        user.setPassword(passEncoder.encode(user.getPassword()));
+    public String CreateUser(UserModel users) {
+        // System.out.println("RAW USER = " + users);
+       System.out.println("USER PASSWORD : "+users.getPassword());
+       System.out.println("USER EMAIL : "+users.getEmail());
+       System.out.println("USER USERNAME : "+users.getEmail());
+        users.setPassword(passEncoder.encode(users.getPassword()));
 
-        urepo.save(user);
+        urepo.save(users);
 
-        return jwtServ.CreateToken(user);
+        return jwtServ.CreateToken(users);
     }
 
     public String LoginUser(LoginDto login) {
-       Optional<UserModel> user = urepo.findByEmail(login.getEmail());
+       Optional<UserModel> users = urepo.findByEmail(login.getEmail());
 
-       if (user.isPresent()) {
+       if (users.isPresent()) {
         
-        UserModel um = user.get();
+        UserModel um = users.get();
 
         if (passEncoder.matches(login.getPassword(), um.getPassword())) {
             
