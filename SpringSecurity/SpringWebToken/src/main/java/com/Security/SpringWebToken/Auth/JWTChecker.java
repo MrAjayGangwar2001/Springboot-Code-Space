@@ -21,46 +21,46 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class JWTChecker extends OncePerRequestFilter{
+public class JWTChecker extends OncePerRequestFilter {
 
     private final JWTService jservice;
     private final UserRepository urepo;
 
-    
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-                String AuthHeader = request.getHeader("Authorization");
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-                if (AuthHeader == null || !AuthHeader.startsWith("Bearer")) {
-                    filterChain.doFilter(request, response);
-                    return ;
-                }
+        String AuthHeader = request.getHeader("Authorization");
 
-                String Token = AuthHeader.substring(7);
-                if (jservice.isTokenExpired(Token)) {
-                    filterChain.doFilter(request, response);
-                    return ;
-                }
+        if (AuthHeader == null || !AuthHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                String EmailCheck = jservice.fetchByEmail(Token);
-                Optional<UserModel> user = urepo.findByEmail(EmailCheck);
+        String Token = AuthHeader.substring(7);
+        if (jservice.isTokenExpired(Token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-                if (user.isPresent()) {
-                    UserModel um = user.get();
+        String EmailCheck = jservice.fetchByEmail(Token);
+        Optional<UserModel> user = urepo.findByEmail(EmailCheck);
 
-                    if (jservice.isTokenValid(Token, um)) {
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, um.getAuthorities());
+        if (user.isPresent()) {
+            UserModel um = user.get();
 
-                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if (jservice.isTokenValid(Token, um)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(um, null,
+                        um.getAuthorities());
 
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    }
+                SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    filterChain.doFilter(request, response);
-                }
-	}
+            }
+
+        }
+        filterChain.doFilter(request, response);
+    }
 
 }
