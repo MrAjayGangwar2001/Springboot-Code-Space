@@ -30,7 +30,9 @@ public class WebConfig {
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
                                                     .requestMatchers("/", "/login", "/register").permitAll()
-                                                    .requestMatchers("/user", "/admin").authenticated()
+                                                    // .requestMatchers("/user", "/admin").authenticated()
+                                                    .requestMatchers("/admin").hasRole("ADMIN")
+                                                    .requestMatchers("/user").hasRole("USER")
                                                     .anyRequest().authenticated()
                     )
                     .formLogin(form -> form.disable())
