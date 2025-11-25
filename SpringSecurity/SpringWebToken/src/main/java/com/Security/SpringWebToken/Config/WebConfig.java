@@ -19,28 +19,27 @@ public class WebConfig {
     private final JWTChecker jwtcheck;
 
     @Bean
-    public PasswordEncoder EncodePass(){
+    public PasswordEncoder EncodePass() {
 
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain SecurityConfig(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain SecurityConfig(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                    .csrf(csrf -> csrf.disable())
-                    .authorizeHttpRequests(auth -> auth
-                                                    .requestMatchers("/", "/login", "/register").permitAll()
-                                                    // .requestMatchers("/user", "/admin").authenticated()
-                                                    .requestMatchers("/admin").hasRole("ADMIN")
-                                                    .requestMatchers("/user").hasRole("USER")
-                                                    .anyRequest().authenticated()
-                    )
-                    .formLogin(form -> form.disable())
-                    .logout(logout -> logout.disable())
-                    .httpBasic(basic -> basic.disable())
-                    .addFilterBefore(jwtcheck, UsernamePasswordAuthenticationFilter.class);
-                    
-                    return httpSecurity.build();
-    
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/register").permitAll()
+                        // .requestMatchers("/user", "/admin").authenticated()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/user").hasRole("USER")
+                        .anyRequest().authenticated())
+                .formLogin(form -> form.disable())
+                .logout(logout -> logout.disable())
+                .httpBasic(basic -> basic.disable());
+                // .addFilterBefore(jwtcheck, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
+
     }
 }
