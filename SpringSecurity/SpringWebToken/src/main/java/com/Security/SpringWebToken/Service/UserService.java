@@ -22,9 +22,9 @@ public class UserService {
 
     public String CreateUser(UserModel users) {
         // System.out.println("RAW USER = " + users);
-       System.out.println("USER PASSWORD : "+users.getPassword());
-       System.out.println("USER EMAIL : "+users.getEmail());
-       System.out.println("USER USERNAME : "+users.getEmail());
+        System.out.println("USER PASSWORD : " + users.getPassword());
+        System.out.println("USER EMAIL : " + users.getEmail());
+        System.out.println("USER USERNAME : " + users.getUsername());
         users.setPassword(passEncoder.encode(users.getPassword()));
 
         urepo.save(users);
@@ -33,19 +33,19 @@ public class UserService {
     }
 
     public String LoginUser(LoginDto login) {
-       Optional<UserModel> users = urepo.findByEmail(login.getEmail());
+        Optional<UserModel> users = urepo.findByEmail(login.getEmail());
 
-       if (users.isPresent()) {
-        
-        UserModel um = users.get();
+        if (users.isPresent()) {
 
-        if (passEncoder.matches(login.getPassword(), um.getPassword())) {
-            
-            String Token = jwtServ.CreateToken(um);
-            return Token;
+            UserModel um = users.get();
+
+            if (passEncoder.matches(login.getPassword(), um.getPassword())) {
+
+                String Token = jwtServ.CreateToken(um);
+                return Token;
+            }
         }
-       }
-       return "INVALID PASSWORD";
+        return "INVALID PASSWORD";
     }
 
 }
