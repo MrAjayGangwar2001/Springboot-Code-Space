@@ -45,6 +45,8 @@ public class HomeController {
        System.out.println("USER PASSWORD : "+user.getPassword());
        System.out.println("USER EMAIL : "+user.getEmail());
        System.out.println("USER USERNAME : "+user.getUsername());
+       System.out.println("USER ROLE : "+user.getRole());
+       
         return userv.CreateUser(user);
     }
 
