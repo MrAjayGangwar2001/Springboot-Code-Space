@@ -1,6 +1,5 @@
 package com.Security.SpringWebToken.Model;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class UserModel implements UserDetails{
+public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +45,16 @@ public class UserModel implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-       return List.of(new SimpleGrantedAuthority("ROLE_" +role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
+
     @Override
     public String getUsername() {
-    //    return getEmail();
+        // return getEmail();
         // return this.email;
         return this.userName;
     }
+
     @Override
     public String getPassword() {
         return this.password;
