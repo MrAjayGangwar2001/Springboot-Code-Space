@@ -1,18 +1,20 @@
 package com.OTP_Login.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.OTP_Login.Dto.UserDto;
 import com.OTP_Login.Exception.OtpCooldownException;
 import com.OTP_Login.Exception.OtpExpiredException;
 import com.OTP_Login.Model.User;
 import com.OTP_Login.OTP.OTPUtility;
 import com.OTP_Login.Repository.OTPRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Service;
 
-import java.time.*;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +54,7 @@ public class OTPService {
         user.setCreatedAt(LocalDateTime.now());
         otpRepository.save(user);
         emailService.Sendotp(email,otp);
-        return ResponseEntity.ok("OTP Has been sent");
+        return ResponseEntity.ok("OTP Has been sent on your email");
     }
 
     public boolean VerifyOTP(String email, Long userOTP){
