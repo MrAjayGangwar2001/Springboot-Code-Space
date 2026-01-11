@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 export default function PaymentSuccess() {
     const [params] = useSearchParams();
     const sessionId = params.get("session_id");
-    const [data, setData] = useState("");
+    const [data, setData] = useState(null);
 
     useEffect(() => {
         if (!sessionId) return;
