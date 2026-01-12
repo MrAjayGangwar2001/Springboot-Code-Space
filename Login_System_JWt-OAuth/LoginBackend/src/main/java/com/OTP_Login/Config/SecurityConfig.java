@@ -18,7 +18,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/email/**",
                                 "/login/**",
-                                "/oauth2/**"
+                                "/oauth2/**",
+                                "/api/payment/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
