@@ -1,0 +1,27 @@
+.home-container {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* HERO */
+.hero-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* FEATURES */
+.feature-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+}
+
+/* STATS */
+.stats-section {
+    background: linear-gradient(135deg, #29e075, #20c997);
+}
