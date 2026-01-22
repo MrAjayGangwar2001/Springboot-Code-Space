@@ -1,6 +1,18 @@
 import Payment from "../Payment";
+import "../css/Home.css";
+import { useRef } from "react";
 
 export default function Home({ email, onLogout }) {
+
+    const featuresRef = useRef(null);
+
+    const handleGetStarted = () => {
+        featuresRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    };
+
     return (
         <div className="home-container">
 
@@ -13,21 +25,23 @@ export default function Home({ email, onLogout }) {
                     </p>
 
                     <div className="mt-4">
-                        <button className="btn btn-light me-3 px-4">
+                        <button className="btn btn-light me-3 px-4"
+                            onClick={handleGetStarted}
+                        >
                             Get Started
                         </button>
-                        <button
+                        {/* <button
                             className="btn btn-outline-light px-4"
                             onClick={onLogout}
                         >
                             Logout
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </section>
 
             {/* FEATURES SECTION */}
-            <section className="py-5 bg-light">
+            <section className="py-5 bg-light" ref={featuresRef}>
                 <div className="container">
                     <h2 className="text-center mb-5 fw-bold">
                         Our Features
