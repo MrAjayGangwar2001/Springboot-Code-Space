@@ -1,6 +1,7 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { api } from "../Services/Api"
-import "./Login.css";
+import "../css/Login.css";
 
 export default function Login({ onLogin }) {
     const [email, setEmail] = useState("");
@@ -97,7 +98,8 @@ export default function Login({ onLogin }) {
             localStorage.setItem("token", res.data.token);
             // ✅ only login on real success
             if (res.status === 200) {
-                onLogin(res.data.email);
+                onLogin(res.data.email, res.data.token);
+
             }
 
         } catch (err) {
@@ -126,64 +128,145 @@ export default function Login({ onLogin }) {
 
 
 
+
+const cardVariant = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: { duration: 0.5, ease: "easeOut" }
+    }
+};
+
+const stepVariant = {
+    hidden: { opacity: 0, x: 40 },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: { duration: 0.4 }
+    },
+    exit: {
+        opacity: 0,
+        x: -40,
+        transition: { duration: 0.3 }
+    }
+};
+
     return (
-        <div className="login-container">
-            <div className="card">
-                <h2>🔐 Login via OTP</h2>
+        <div className="login-wrapper">
+            <motion.div
+                className="login-card"
+                variants={cardVariant}
+                initial="hidden"
+                animate="visible"
+            >
+                <h3 className="text-center fw-bold mb-2">Login to Your Account</h3>
+                <p className="text-center text-muted mb-4">
+                    Secure login using Email OTP
+                </p>
 
-                {step === 1 && (
-                    <>
-                        <input
-                            type="email"
-                            placeholder="Enter email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <button onClick={sendOtp} disabled={loading}>
-                            {loading ? "Sending OTP..." : "Send OTP"}
-                        </button>
-
-                        <button
-                            className="google-btn"
-                            onClick={() => {
-                                window.location.href =
-                                    "http://localhost:8080/oauth2/authorization/google";
-                            }}
+                <AnimatePresence mode="wait">
+                    {step === 1 && (
+                        <motion.div
+                            key="step1"
+                            variants={stepVariant}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
                         >
-                            🔵 Login with Google
-                        </button>
+                            <div className="mb-3">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    placeholder="name@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
 
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="btn btn-primary w-100"
+                                onClick={sendOtp}
+                                disabled={loading}
+                            >
+                                {loading ? "Sending OTP..." : "Send OTP"}
+                            </motion.button>
 
-                    </>
-                )}
+                            <div className="divider my-4">OR</div>
 
-                {step === 2 && (
-                    <>
-                        <input
-                            type="text"
-                            placeholder="Enter OTP"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                        />
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="btn btn-outline-dark w-100 google-btn"
+                                onClick={() =>
+                                    (window.location.href =
+                                        "http://localhost:8080/oauth2/authorization/google")
+                                }
+                            >
+                                <img
+                                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                    alt="google"
+                                    width="18"
+                                    className="me-2"
+                                />
+                                Continue with Google
+                            </motion.button>
+                        </motion.div>
+                    )}
 
-                        <button onClick={verifyOtp}>Verify OTP</button>
-
-                        <button
-                            onClick={resendOtp}
-                            disabled={!canResend}
-                            style={{
-                                backgroundColor: canResend ? "#4f46e5" : "#ccc",
-                                cursor: canResend ? "pointer" : "not-allowed"
-                            }}
+                    {step === 2 && (
+                        <motion.div
+                            key="step2"
+                            variants={stepVariant}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
                         >
-                            {canResend ? "Resend OTP" : `Resend in ${timer}s`}
-                        </button>
-                    </>
+                            <div className="mb-3">
+                                <label className="form-label">Enter OTP</label>
+                                <motion.input
+                                    type="text"
+                                    className="form-control text-center otp-input"
+                                    placeholder="••••••"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    whileFocus={{ scale: 1.05 }}
+                                />
+                            </div>
+
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="btn btn-success w-100 mb-2"
+                                onClick={verifyOtp}
+                            >
+                                Verify OTP
+                            </motion.button>
+
+                            <button
+                                className="btn btn-link w-100 resend-btn"
+                                onClick={resendOtp}
+                                disabled={!canResend}
+                            >
+                                {canResend ? "Resend OTP" : `Resend in ${timer}s`}
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {msg && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="alert alert-info mt-3 text-center"
+                    >
+                        {msg}
+                    </motion.div>
                 )}
-
-
-                {msg && <p className="msg">{msg}</p>}
-            </div>
+            </motion.div>
         </div>
     );
 }
